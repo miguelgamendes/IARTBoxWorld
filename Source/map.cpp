@@ -4,7 +4,7 @@ map::map(int width, int height)
 {
 	this->width = width;
 	this->height = height;
-	this->tiles.resize(width, std::vector<tile>(height, tile(3)));
+	this->tiles.resize(height, std::vector<tile>(width, tile(3)));
 }
 
 map::~map()
@@ -13,5 +13,5 @@ map::~map()
 
 void map::setTile(tile tile, int x, int y)
 {
-	this->tiles[y][x] = tile;
+	this->tiles[x][y] = tile;
 }
