@@ -13,6 +13,6 @@ public:
 	tile(int selector);
 	~tile();
 
-	sf::Sprite getTile() {return this->sprite; }
+	sf::Sprite& getTile() {return this->sprite; }
 	void setSelector(int selector);
 };
