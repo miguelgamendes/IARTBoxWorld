@@ -1,16 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "tile.h"
+
+sf::Texture tile::tileset = sf::Texture(); //needed so linker doesn't crash
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Warehouse Keeper");
-	sf::Texture tileset;
-	sf::Sprite tile;
-	tile.setTexture(tileset);
-	tile.setTextureRect(sf::IntRect(0, 0, 16, 24));
-	if (!tileset.loadFromFile("tileset.png")) {
-		std::cout << "Couldn't load tileset, make sure it's in the correct directory!";
-	}
+	tile::tileset.loadFromFile("tileset.png");
+	tile test = tile(0);
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -21,7 +19,7 @@ int main()
 		}
 
 		window.clear();
-		window.draw(tile);
+		window.draw(test.getTile());
 		window.display();
 	}
 
