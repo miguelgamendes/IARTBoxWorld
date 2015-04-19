@@ -16,4 +16,6 @@ public:
 	int& getWidth() {return this->width; }
 	int& getHeight() {return this->height; }
 	std::vector<std::vector<tile>>& getTiles() {return this->tiles; }
+
+	sf::FloatRect getMapBounds();
 };
