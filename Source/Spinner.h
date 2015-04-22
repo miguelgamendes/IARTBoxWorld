@@ -5,16 +5,17 @@
 class Spinner
 {
 	sf::Sprite sprite;
+	sf::Text text;
 	int pos_x;
 	int pos_y;
-	std::string text;
 	int* target;
 
 public:
 	static sf::Texture texture;
 
 	//Constructor/Destructor
-	Spinner(int pos_x, int pos_y, std::string text, int* target);
+	Spinner(int pos_x, int pos_y, sf::Text text);
+	Spinner(int pos_x, int pos_y, sf::Text text, int* target);
 	~Spinner();
 
 	//Setters
@@ -25,4 +26,5 @@ public:
 	//Functions
 	void incrementTarget() {*(this->target) += 1; }
 	void decrementTarget() {*(this->target) += 1; }
+	void drawSpinner(sf::RenderWindow& window);
 };

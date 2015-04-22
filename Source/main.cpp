@@ -10,19 +10,18 @@
 sf::Texture tile::tileset = sf::Texture(); //needed so linker doesn't crash
 sf::Texture Spinner::texture = sf::Texture(); //needed so linker doesn't crash
 
-void drawMap(sf::RenderWindow& window, map map);
+std::string intToString(int &number);
 map loadMap(std::string filename);
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Warehouse Keeper");
+	sf::Font font;
 	tile::tileset.loadFromFile("tileset.png");
-	Spinner::texture.loadFromFile("tileset.png");
-	map test = loadMap("map1");
-	sf::FloatRect mapBounds = test.getMapBounds();
-	mapBounds.left += 100;
-	mapBounds.top += 200;
-	std::vector<std::vector<tile>> tiles = test.getTiles();
+	Spinner::texture.loadFromFile("spinner.png");
+	font.loadFromFile("arial.ttf");
+	//map test = loadMap("map1");
+	map test(5, 5, 300, 200);
 	sf::Sprite tileGUI;
 	sf::RectangleShape selected;
 	sf::Vector2i selectedTile(0, 0);
@@ -30,11 +29,25 @@ int main()
 	tileGUI.setPosition(1, 1);
 
 
-	Spinner tSpinner(200, 0, "width", &(test.getWidth()));
+	sf::Text widthSpinnerT;
+	sf::Text widthLabel;
+	widthSpinnerT.setFont(font);
+	widthLabel.setFont(font);
+	widthSpinnerT.setCharacterSize(12);
+	widthLabel.setCharacterSize(12);
+	widthSpinnerT.setColor(sf::Color::White);
+	widthLabel.setColor(sf::Color::White);
+	widthSpinnerT.setPosition(55, 200);
+	widthLabel.setPosition(10, 200);
+	widthLabel.setString("Width:");
+	Spinner widthSpinner(50, 200, widthLabel);
+
+
 
 
 	while (window.isOpen())
 	{
+		widthSpinnerT.setString(intToString(test.getWidth()));
 		window.clear();
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -57,12 +70,12 @@ int main()
 						selected.setOutlineThickness(1.0);
 						selectedTile = sf::Vector2i((int)(event.mouseButton.x - tileGUI.getGlobalBounds().left) / 17, (int)(event.mouseButton.y - tileGUI.getGlobalBounds().top) / 25);
 					}
-					else if (mapBounds.contains(event.mouseButton.x, event.mouseButton.y)) {
+					else if (test.getMapBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
 						int i, j;
-						i = (int)(event.mouseButton.x - mapBounds.left) / 16;
-						j = (int)(event.mouseButton.y - 6 - mapBounds.top) / 16;
+						i = (int)(event.mouseButton.x - test.getMapBounds().left) / 16;
+						j = (int)(event.mouseButton.y - 6 - test.getMapBounds().top) / 16;
 						if (j <= 0) {
-							j = (int)(event.mouseButton.y - mapBounds.top) / 24;
+							j = (int)(event.mouseButton.y - test.getMapBounds().top) / 24;
 						} 
 						else if (j > 0 && j < test.getHeight() - 1) {
 							//j = (int)(event.mouseButton.y - mapBounds.top) / 16;
@@ -70,12 +83,16 @@ int main()
 						else {
 							j = test.getHeight() - 1;
 						}
-						std::cout << (int)((event.mouseButton.x - mapBounds.left) / 16) << " | " << (int)((event.mouseButton.y - mapBounds.top) / 16) << std::endl;
+						std::cout << (int)((event.mouseButton.x - test.getMapBounds().left) / 16) << " | " << (int)((event.mouseButton.y - test.getMapBounds().top) / 16) << std::endl;
 						test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
 					}
-					else if (tSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-						tSpinner.incrementTarget();
-						std::cout << test.getWidth() << std::endl;
+					else if (widthSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+						if ((event.mouseButton.x - widthSpinner.getSprite().getGlobalBounds().left >= 21) && (event.mouseButton.y - widthSpinner.getSprite().getGlobalBounds().top <= 9)) {
+							test.modifyWidth(1);
+						}
+						else if ((event.mouseButton.x - widthSpinner.getSprite().getGlobalBounds().left >= 21) && (event.mouseButton.y - widthSpinner.getSprite().getGlobalBounds().top > 9)) {
+							test.modifyWidth(-1);
+						}
 					}
 				}
 				break;
@@ -85,21 +102,12 @@ int main()
 		}
 		window.draw(selected);
 		window.draw(tileGUI);
-		window.draw(tSpinner.getSprite());
-		drawMap(window, test);
+		test.drawMap(window);
+		widthSpinner.drawSpinner(window);
+		window.draw(widthSpinnerT);
 		window.display();
 	}
 	return 0;
-}
-
-void drawMap(sf::RenderWindow& window, map map) {
-	std::vector<std::vector<tile>> tiles = map.getTiles();
-	for (int i = 0; i < tiles.size(); ++i) {
-		for (int j = 0; j < tiles[i].size(); ++j) {
-			tiles[i][j].getTile().move(100 + j * 16, 200 +  i * 16);
-			window.draw(tiles[i][j].getTile());
-		}
-	}
 }
 
 map loadMap(std::string filename) {
@@ -120,4 +128,10 @@ map loadMap(std::string filename) {
 		}
 	}
 	return map;
+}
+
+std::string intToString(int &number) {
+	std::stringstream convert;
+	convert << number;
+	return convert.str();
 }
