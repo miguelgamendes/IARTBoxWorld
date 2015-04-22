@@ -2,6 +2,7 @@
 
 tile::tile(int selector)
 {
+	this->selector = selector;
 	this->sprite.setTexture(tileset);
 	div_t divres;
 	divres = div(selector, 3);
@@ -13,6 +14,7 @@ tile::~tile()
 }
 
 void tile::setSelector(int selector) {
+	this->selector = selector;
 	div_t divres;
 	divres = div(selector, 3);
 	this->sprite.setTextureRect(sf::IntRect((divres.rem * 16 + divres.rem), (divres.quot * 24 + divres.quot), 16, 24));

@@ -10,9 +10,14 @@ class tile
 public:
 	static sf::Texture tileset;
 
+	//Constructor/Destructor
 	tile(int selector);
 	~tile();
 
-	sf::Sprite& getTile() {return this->sprite; }
+	//Setters
 	void setSelector(int selector);
+
+	//Getters
+	sf::Sprite& getTile() {return this->sprite; }
+	int getSelector() {return this->selector; }
 };

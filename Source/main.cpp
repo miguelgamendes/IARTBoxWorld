@@ -12,6 +12,7 @@ sf::Texture Spinner::texture = sf::Texture(); //needed so linker doesn't crash
 
 std::string intToString(int &number);
 map loadMap(std::string filename);
+void saveMap(std::string filename, map map);
 
 int main()
 {
@@ -20,8 +21,10 @@ int main()
 	tile::tileset.loadFromFile("tileset.png");
 	Spinner::texture.loadFromFile("spinner.png");
 	font.loadFromFile("arial.ttf");
-	//map test = loadMap("map1");
-	map test(5, 5, 300, 200);
+	map test = loadMap("test");
+	test.setPos_x(300);
+	test.setPos_y(200);
+	//map test(5, 5, 300, 200);
 	sf::Sprite tileGUI;
 	sf::RectangleShape selected;
 	sf::Vector2i selectedTile(0, 0);
@@ -67,6 +70,7 @@ int main()
 		{
 			switch (event.type) {
 			case sf::Event::Closed:
+				saveMap("test", test);
 				window.close();
 				break;
 			case sf::Event::Resized:
@@ -98,6 +102,7 @@ int main()
 						}
 						std::cout << (int)((event.mouseButton.x - test.getMapBounds().left) / 16) << " | " << (int)((event.mouseButton.y - test.getMapBounds().top) / 16) << std::endl;
 						test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
+						std::cout << selectedTile.x + selectedTile.y * 3 << std::endl;
 					}
 					else if (widthSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
 						if ((event.mouseButton.x - widthSpinner.getSprite().getGlobalBounds().left >= 21) && (event.mouseButton.y - widthSpinner.getSprite().getGlobalBounds().top <= 9)) {
@@ -151,6 +156,19 @@ map loadMap(std::string filename) {
 		}
 	}
 	return map;
+}
+
+void saveMap(std::string filename, map map) {
+	std::ofstream file(filename + ".txt", std::ofstream::out);
+	file << map.getWidth() << std::endl;
+	file << map.getHeight() << std::endl;
+	for (int i = 0; i < map.getTiles().size(); ++i) {
+		for (int j = 0; j < map.getTiles()[i].size(); ++j) {
+			file << map.getTiles()[i][j].getSelector() << ",";
+		}
+		file << std::endl;
+	}
+	file.close();
 }
 
 std::string intToString(int &number) {

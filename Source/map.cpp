@@ -67,7 +67,6 @@ void map::drawMap(sf::RenderWindow& window) {
 		for (int j = 0; j < this->tiles[i].size(); ++j) {
 			this->tiles[i][j].getTile().setPosition(this->pos_x + j * 16, this->pos_y + i * 16);
 			window.draw(this->tiles[i][j].getTile());
-			//std::cout << i << " | " << j << std::endl;
 		}
 	}
 }
