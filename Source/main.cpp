@@ -43,11 +43,24 @@ int main()
 	Spinner widthSpinner(50, 200, widthLabel);
 
 
+	sf::Text heightSpinnerT;
+	sf::Text heightLabel;
+	heightSpinnerT.setFont(font);
+	heightLabel.setFont(font);
+	heightSpinnerT.setCharacterSize(12);
+	heightLabel.setCharacterSize(12);
+	heightSpinnerT.setColor(sf::Color::White);
+	heightLabel.setColor(sf::Color::White);
+	heightSpinnerT.setPosition(55, 230);
+	heightLabel.setPosition(8, 230);
+	heightLabel.setString("Height:");
+	Spinner heightSpinner(50, 230, heightLabel);
 
 
 	while (window.isOpen())
 	{
 		widthSpinnerT.setString(intToString(test.getWidth()));
+		heightSpinnerT.setString(intToString(test.getHeight()));
 		window.clear();
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -94,6 +107,14 @@ int main()
 							test.modifyWidth(-1);
 						}
 					}
+					else if (heightSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+						if ((event.mouseButton.x - heightSpinner.getSprite().getGlobalBounds().left >= 21) && (event.mouseButton.y - heightSpinner.getSprite().getGlobalBounds().top <= 9)) {
+							test.modifyHeight(1);
+						}
+						else if ((event.mouseButton.x - heightSpinner.getSprite().getGlobalBounds().left >= 21) && (event.mouseButton.y - heightSpinner.getSprite().getGlobalBounds().top > 9)) {
+							test.modifyHeight(-1);
+						}
+					}
 				}
 				break;
 			default:
@@ -104,7 +125,9 @@ int main()
 		window.draw(tileGUI);
 		test.drawMap(window);
 		widthSpinner.drawSpinner(window);
+		heightSpinner.drawSpinner(window);
 		window.draw(widthSpinnerT);
+		window.draw(heightSpinnerT);
 		window.display();
 	}
 	return 0;

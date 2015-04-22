@@ -29,6 +29,6 @@ public:
 
 	//Functions
 	void modifyWidth(int rate);
-	void modifyHeight(int rate) { this->height += rate; }
+	void modifyHeight(int rate);
 	void drawMap(sf::RenderWindow& window);
 };

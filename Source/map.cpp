@@ -49,6 +49,19 @@ void map::modifyWidth(int rate) {
 	else this->width = 1;
 }
 
+void map::modifyHeight(int rate) {
+	this->height += rate;
+	if (height >= 1) {
+		if (rate > 0) {
+			this->tiles.push_back(std::vector<tile>(this->width, tile(3)));
+		}
+		else if (rate < 0) {
+			this->tiles.erase(this->tiles.end() - 1);
+		}
+	}
+	else this->height = 1;
+}
+
 void map::drawMap(sf::RenderWindow& window) {
 	for (int i = 0; i < this->tiles.size(); ++i) {
 		for (int j = 0; j < this->tiles[i].size(); ++j) {
