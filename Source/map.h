@@ -12,6 +12,8 @@ public:
 	~map();
 
 	void setTile(tile tile, int x, int y);
+	void modifyWidth(int rate) { this->width += rate; }
+	void modifyHeight(int rate) { this->height += rate; }
 
 	int& getWidth() {return this->width; }
 	int& getHeight() {return this->height; }

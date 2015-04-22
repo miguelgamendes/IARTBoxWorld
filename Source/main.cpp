@@ -3,10 +3,12 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "Spinner.h"
 #include "tile.h"
 #include "map.h"
 
 sf::Texture tile::tileset = sf::Texture(); //needed so linker doesn't crash
+sf::Texture Spinner::texture = sf::Texture(); //needed so linker doesn't crash
 
 void drawMap(sf::RenderWindow& window, map map);
 map loadMap(std::string filename);
@@ -15,6 +17,7 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Warehouse Keeper");
 	tile::tileset.loadFromFile("tileset.png");
+	Spinner::texture.loadFromFile("tileset.png");
 	map test = loadMap("map1");
 	sf::FloatRect mapBounds = test.getMapBounds();
 	mapBounds.left += 100;
@@ -25,6 +28,11 @@ int main()
 	sf::Vector2i selectedTile(0, 0);
 	tileGUI.setTexture(tile::tileset);
 	tileGUI.setPosition(1, 1);
+
+
+	Spinner tSpinner(200, 0, "width", &(test.getWidth()));
+
+
 	while (window.isOpen())
 	{
 		window.clear();
@@ -65,6 +73,10 @@ int main()
 						std::cout << (int)((event.mouseButton.x - mapBounds.left) / 16) << " | " << (int)((event.mouseButton.y - mapBounds.top) / 16) << std::endl;
 						test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
 					}
+					else if (tSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+						tSpinner.incrementTarget();
+						std::cout << test.getWidth() << std::endl;
+					}
 				}
 				break;
 			default:
@@ -73,6 +85,7 @@ int main()
 		}
 		window.draw(selected);
 		window.draw(tileGUI);
+		window.draw(tSpinner.getSprite());
 		drawMap(window, test);
 		window.display();
 	}
