@@ -5,6 +5,7 @@
 *.sln
 *.vcxproj
 *.vcxproj.filters
+project_folder/
 
 # User-specific files
 *.suo
