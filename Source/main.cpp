@@ -64,7 +64,9 @@ int main()
 	{
 		widthSpinnerT.setString(intToString(test.getWidth()));
 		heightSpinnerT.setString(intToString(test.getHeight()));
-		window.clear();
+
+		//INPUT
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -126,6 +128,10 @@ int main()
 				break;
 			}
 		}
+
+		// RENDERING
+
+		window.clear();
 		window.draw(selected);
 		window.draw(tileGUI);
 		test.drawMap(window);

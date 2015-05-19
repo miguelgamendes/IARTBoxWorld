@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
 #include "tile.h"
+#include "player.h"
 
 class map
 {
+	Player player;
 	std::vector<std::vector<tile>> tiles;
 	int width;
 	int height;

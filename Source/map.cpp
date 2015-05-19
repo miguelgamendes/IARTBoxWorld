@@ -1,19 +1,24 @@
 #include "map.h"
 #include <iostream>
 
-map::map(int width, int height) {
+map::map(int width, int height) :
+	player()
+{
 	this->width = width;
 	this->height = height;
 	this->tiles.resize(height, std::vector<tile>(width, tile(3)));
 }
 
-map::map(int width, int height, int pos_x, int pos_y)
+map::map(int width, int height, int pos_x, int pos_y) :
+	player()
 {
 	this->width = width;
 	this->height = height;
 	this->tiles.resize(height, std::vector<tile>(width, tile(3)));
 	this->pos_x = pos_x;
 	this->pos_y = pos_y;
+
+	player.setPosition(sf::Vector2f(pos_x, pos_y));
 }
 
 map::~map()
@@ -67,6 +72,12 @@ void map::drawMap(sf::RenderWindow& window) {
 		for (int j = 0; j < this->tiles[i].size(); ++j) {
 			this->tiles[i][j].getTile().setPosition(this->pos_x + j * 16, this->pos_y + i * 16);
 			window.draw(this->tiles[i][j].getTile());
+
+			//for drawing the player
+			if(i == player.getMapPosY() && j == player.getMapPosX()) {
+				player.setPosition(sf::Vector2f(pos_x, pos_y));
+				player.render(&window);
+			}
 		}
 	}
 }
