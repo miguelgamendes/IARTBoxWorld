@@ -1,7 +1,11 @@
 #pragma once
+
+#include <cmath>
+#include <queue>
 #include <vector>
-#include "tile.h"
+#include "node.h"
 #include "player.h"
+#include "tile.h"
 
 class map
 {
@@ -24,6 +28,7 @@ public:
 	void setPos_y(int pos_y) {this->pos_y = pos_y; }
 
 	//Getters
+	tile getTileValue(int x, int y);
 	int& getWidth() {return this->width; }
 	int& getHeight() {return this->height; }
 	std::vector<std::vector<tile>>& getTiles() {return this->tiles; }
@@ -33,4 +38,5 @@ public:
 	void modifyWidth(int rate);
 	void modifyHeight(int rate);
 	void drawMap(sf::RenderWindow& window);
+	std::vector<int[2]> findpath(int originX, int originY, int destinationX, int destinationY);
 };
