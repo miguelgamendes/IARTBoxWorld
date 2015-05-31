@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <map>
 #include <queue>
 #include <vector>
 #include "node.h"
@@ -16,6 +17,18 @@ class map
 	int pos_x;
 	int pos_y;
 
+	//algorithm related members
+	struct compareNodes {
+		bool operator() (Node const &n1, Node const &n2) {
+			return n1.getfx() > n2.getfx();
+		}
+	};
+	std::vector<Node> processed;
+	//std::priority_queue<Node, std::vector<Node>, compareNodes> unprocessed;
+	std::vector<Node> unprocessed;
+	std::vector<Node> assist;
+	int cameFrom[30][30][2];
+
 public:
 	//Constructor/Destructor
 	map(int width, int height);
@@ -26,6 +39,7 @@ public:
 	void setTile(tile tile, int x, int y);
 	void setPos_x(int pos_x) {this->pos_x = pos_x; }
 	void setPos_y(int pos_y) {this->pos_y = pos_y; }
+	void setPlayerPosition(int x, int y);
 
 	//Getters
 	tile getTileValue(int x, int y);
@@ -33,6 +47,8 @@ public:
 	int& getHeight() {return this->height; }
 	std::vector<std::vector<tile>>& getTiles() {return this->tiles; }
 	sf::FloatRect getMapBounds();
+	int getPlayerPosX();
+	int getPlayerPosY();
 
 	//Functions
 	void modifyWidth(int rate);

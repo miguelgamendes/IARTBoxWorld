@@ -31,6 +31,8 @@ int main()
 	tileGUI.setTexture(tile::tileset);
 	tileGUI.setPosition(1, 1);
 
+	bool placingPlayer = false;
+
 
 	sf::Text widthSpinnerT;
 	sf::Text widthLabel;
@@ -74,13 +76,6 @@ int main()
 			switch (event.type) {
 			case sf::Event::Closed:
 				saveMap("test", test);
-				
-				path = test.findpath(1, 1, 3, 3);
-				for(int i = 0; i < path.size(); i++) {
-					std::cout << path[i] << std::endl;
-					system("pause");
-				}
-
 				window.close();
 				break;
 			case sf::Event::Resized:
@@ -111,7 +106,10 @@ int main()
 							j = test.getHeight() - 1;
 						}
 						std::cout << (int)((event.mouseButton.x - test.getMapBounds().left) / 16) << " | " << (int)((event.mouseButton.y - test.getMapBounds().top) / 16) << std::endl;
-						test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
+						if(placingPlayer) {
+							test.setPlayerPosition(i, j);
+						} else
+							test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
 						std::cout << selectedTile.x + selectedTile.y * 3 << std::endl;
 					}
 					else if (widthSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
@@ -130,6 +128,24 @@ int main()
 							test.modifyHeight(-1);
 						}
 					}
+				}
+				break;
+			case sf::Event::KeyPressed:
+				if(event.key.code == sf::Keyboard::P) {
+					placingPlayer = true;
+				}
+				break;
+			case sf::Event::KeyReleased:
+				if(event.key.code == sf::Keyboard::P) {
+					placingPlayer = false;
+				}
+				if(event.key.code == sf::Keyboard::Return) {
+					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), 5, 1);
+					std::cout << "PATH" << std::endl;
+					for(int i = 0; i < path.size(); i++) {
+						std::cout << path[i] << std::endl;
+					}
+					std::cout << "END OF PATH" << std::endl;
 				}
 				break;
 			default:
