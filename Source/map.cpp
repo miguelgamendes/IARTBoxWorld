@@ -106,6 +106,8 @@ std::vector<int[2]> map::findpath(int originX, int originY, int destinationX, in
 		unprocessed.pop();
 		processed.push_back(current);
 
+		//get neighbours of current Node
+		std::vector<Node> neighbours;
 		//process neighbours
 	}
 
