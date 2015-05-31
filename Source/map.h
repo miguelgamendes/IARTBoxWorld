@@ -46,6 +46,7 @@ public:
 	sf::FloatRect getMapBounds();
 	int getPlayerPosX();
 	int getPlayerPosY();
+	sf::Vector2i getGoal();
 
 	//Functions
 	void modifyWidth(int rate);

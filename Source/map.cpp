@@ -54,6 +54,23 @@ int map::getPlayerPosY() {
 	return player.getMapPosY();
 }
 
+sf::Vector2i map::getGoal() {
+	for(int i = 0; i < tiles.size(); i++) {
+		for(int j = 0; j < tiles[i].size(); j++) {
+			if(getTileValue(i, j) == 4) {
+				if(i == 0)
+					return sf::Vector2i(i, j+1);
+				if(j == 0)
+					return sf::Vector2i(i+1, j);
+				if(i > j)
+					return sf::Vector2i(i-1, j);
+				if(j < i)
+					return sf::Vector2i(i, j-1);
+			}
+		}
+	}
+}
+
 void map::modifyWidth(int rate) {
 	this->width += rate;
 	if (width >= 1) {

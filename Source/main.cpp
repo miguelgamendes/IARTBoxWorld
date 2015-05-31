@@ -144,8 +144,10 @@ int main()
 					placingPlayer = false;
 				}
 				if(event.key.code == sf::Keyboard::Return) {
+					//find exit
+					sf::Vector2i exit = test.getGoal();
 					//find the best possible path
-					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), 5, 1);
+					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), exit.x, exit.y);
 					/*
 					//identify holes
 					for(int i = 0; i < path.size(); i + 2) {
