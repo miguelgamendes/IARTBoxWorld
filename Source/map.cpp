@@ -79,7 +79,7 @@ void map::drawMap(sf::RenderWindow& window) {
 
 			//for drawing the player
 			if(i == player.getMapPosY() && j == player.getMapPosX()) {
-				player.setPosition(sf::Vector2f(pos_x, pos_y));
+				player.setPosition(sf::Vector2f(pos_x + player.getMapPosX() * 16, pos_y + player.getMapPosY() * 16));
 				player.render(&window);
 			}
 		}

@@ -1,15 +1,15 @@
 #include "player.h"
 
 Player::Player() {
-	sprite.setFillColor(sf::Color::Magenta);
-	sprite.setSize(sf::Vector2f(16.0f, 16.0f));
+	texture.loadFromFile("player.png");
+	sprite.setTexture(texture);
 	pos_x = 0;
 	pos_y = 0;
 }
 
 Player::Player(int pos_x, int pos_y) {
-	sprite.setFillColor(sf::Color::Magenta);
-	sprite.setSize(sf::Vector2f(16.0f, 16.0f));
+	texture.loadFromFile("player.png");
+	sprite.setTexture(texture);
 	this->pos_x = pos_x;
 	this->pos_y = pos_y;
 }

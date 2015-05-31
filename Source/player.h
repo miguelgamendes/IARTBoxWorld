@@ -4,7 +4,8 @@
 
 class Player {
 private:
-	sf::RectangleShape sprite;
+	sf::Sprite sprite;
+	sf::Texture texture;
 	int pos_x;
 	int pos_y;
 public:

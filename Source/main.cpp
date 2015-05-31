@@ -59,6 +59,7 @@ int main()
 	heightLabel.setString("Height:");
 	Spinner heightSpinner(50, 230, heightLabel);
 
+	std::vector<int> path;
 
 	while (window.isOpen())
 	{
@@ -73,6 +74,13 @@ int main()
 			switch (event.type) {
 			case sf::Event::Closed:
 				saveMap("test", test);
+				
+				path = test.findpath(1, 1, 3, 3);
+				for(int i = 0; i < path.size(); i++) {
+					std::cout << path[i] << std::endl;
+					system("pause");
+				}
+
 				window.close();
 				break;
 			case sf::Event::Resized:
