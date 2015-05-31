@@ -99,6 +99,20 @@ void map::drawMap(sf::RenderWindow& window) {
 	}
 }
 
+std::vector<int> map::boxPositions() {
+	std::vector<int> final;
+	for(int i = 0; i < tiles.size(); i++) {
+		for(int j = 0; j < tiles[i].size(); j++) {
+			if(getTileValue(i, j) <= 2) {
+				final.push_back(i);
+				final.push_back(j);
+			}
+		}
+	}
+
+	return final;
+}
+
 int map::distance(Node n1, Node n2) {
 	if(tiles[n2.getX()][n2.getY()].getSelector() >= 9 &&
 		tiles[n2.getX()][n2.getY()].getSelector() <= 11)
@@ -185,13 +199,101 @@ std::vector<int> map::findpath(int originX, int originY, int destinationX, int d
 			getTileValue(current.getX()+1, current.getY()) <= 11) //here we evaluate passable tiles manually, according to the established tileset
 			neighbours.push_back(Node(current.getX()+1, current.getY()));
 		if(getTileValue(current.getX(), current.getY()+1) >= 6 &&
-			getTileValue(current.getX()+1, current.getY()+1) <= 11)
+			getTileValue(current.getX(), current.getY()+1) <= 11)
 			neighbours.push_back(Node(current.getX(), current.getY()+1));
 		if(getTileValue(current.getX()-1, current.getY()) >= 6 &&
 			getTileValue(current.getX()-1, current.getY()) <= 11)
 			neighbours.push_back(Node(current.getX()-1, current.getY()));
 		if(getTileValue(current.getX(), current.getY()-1) >= 6 &&
 			getTileValue(current.getX(), current.getY()-1) <= 11)
+			neighbours.push_back(Node(current.getX(), current.getY()-1));
+
+		//process neighbours
+		for(int i = 0; i < neighbours.size(); i++) {
+			//check if neighbour has been processed
+			bool processedCheck = false;
+			for(int j = 0; j < processed.size(); j++) {
+				if(neighbours[i].getX() == processed[j].getX() &&
+					neighbours[i].getY() == processed[j].getY())
+					processedCheck = true;
+			}
+			if(processedCheck)
+				continue;
+			int possibleGX = current.getgx() + distance(current, neighbours[i]);
+
+			bool unprocessedCheck = false;
+			for (int j = 0; j < assist.size(); j++) {
+				if(neighbours[i].getX() == assist[j].getX() &&
+					neighbours[i].getY() == assist[j].getY())
+					unprocessedCheck = true;
+			}
+			if(!unprocessedCheck || possibleGX < current.getgx()) {
+				//neighbours[i].cameFrom(&processed[processed.size()-1]);
+				cameFrom[neighbours[i].getX()][neighbours[i].getY()][0] = current.getX();
+				cameFrom[neighbours[i].getX()][neighbours[i].getY()][1] = current.getY();
+				neighbours[i].setgx(possibleGX);
+				neighbours[i].sethx(heuristic(neighbours[i], destinationX, destinationY));
+				if(!unprocessedCheck)
+					unprocessed.push_back(neighbours[i]);
+			}
+		}
+	}
+}
+
+std::vector<int> map::findboxpath(int originX, int originY, int destinationX, int destinationY) {
+	std::vector<Node> processed;
+	//std::priority_queue<Node, std::vector<Node>, compareNodes> unprocessed;
+	std::vector<Node> unprocessed;
+	std::vector<Node> assist;
+	
+	cameFrom[originX][originY][0] = 0;
+	cameFrom[originX][originY][1] = 0;
+	Node current(0, 0); //the current node to analyze
+	
+	//every operation to the priority queue must be accompanied by operations to the assisting vector
+	unprocessed.push_back(Node(originX, originY, 0, (std::abs(destinationX - originX) + std::abs(destinationY - originY)))); //put first node in unprocessed nodes
+	assist.push_back(unprocessed.back());
+
+	while(!unprocessed.empty()) {
+		int lowestIndex = 0;
+		for(int i = 0, j = 1000000; i < unprocessed.size(); i++) {
+			if(unprocessed[i].getfx() < j){
+				j = unprocessed[i].getfx();
+				lowestIndex = i;
+			}
+		}
+		current = unprocessed[lowestIndex];
+		if(current.getX() == destinationX && current.getY() == destinationY)
+			return reconstructPath(current);
+
+		for(int i = 0; i < assist.size(); i++) {
+			if(assist[i].getX() == current.getX() && assist[i].getY() == current.getY())
+				assist.erase(assist.begin() + i);
+		}
+		unprocessed.erase(unprocessed.begin() + lowestIndex);
+		processed.push_back(current);
+
+		//get neighbours of current Node
+		std::vector<Node> neighbours;
+		if(getTileValue(current.getX()+1, current.getY()) >= 6 &&
+			getTileValue(current.getX()+1, current.getY()) <= 11 &&
+			getTileValue(current.getX()-1, current.getY()) >= 6 &&
+			getTileValue(current.getX()-1, current.getY()) <= 11) //here we evaluate passable tiles manually, according to the established tileset
+			neighbours.push_back(Node(current.getX()+1, current.getY()));
+		if(getTileValue(current.getX(), current.getY()+1) >= 6 &&
+			getTileValue(current.getX(), current.getY()+1) <= 11 &&
+			getTileValue(current.getX(), current.getY()-1) >= 6 &&
+			getTileValue(current.getX(), current.getY()-1) <= 11)
+			neighbours.push_back(Node(current.getX(), current.getY()+1));
+		if(getTileValue(current.getX()-1, current.getY()) >= 6 &&
+			getTileValue(current.getX()-1, current.getY()) <= 11 &&
+			getTileValue(current.getX()+1, current.getY()) >= 6 &&
+			getTileValue(current.getX()+1, current.getY()) <= 11)
+			neighbours.push_back(Node(current.getX()-1, current.getY()));
+		if(getTileValue(current.getX(), current.getY()-1) >= 6 &&
+			getTileValue(current.getX(), current.getY()-1) <= 11 &&
+			getTileValue(current.getX(), current.getY()+1) >= 6 &&
+			getTileValue(current.getX(), current.getY()+1) <= 11)
 			neighbours.push_back(Node(current.getX(), current.getY()-1));
 
 		//process neighbours

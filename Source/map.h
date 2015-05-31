@@ -51,8 +51,10 @@ public:
 	void modifyWidth(int rate);
 	void modifyHeight(int rate);
 	void drawMap(sf::RenderWindow& window);
+	std::vector<int> boxPositions();
 	int distance(Node n1, Node n2);
 	int heuristic(Node n, int destX, int destY);
 	std::vector<int> reconstructPath(Node n);
 	std::vector<int> findpath(int originX, int originY, int destinationX, int destinationY);
+	std::vector<int> findboxpath(int originX, int originY, int destinationX, int destinationY);
 };

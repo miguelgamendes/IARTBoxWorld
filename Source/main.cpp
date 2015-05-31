@@ -64,6 +64,8 @@ int main()
 	Spinner heightSpinner(50, 230, heightLabel);
 
 	std::vector<int> path;
+	std::vector<int> holePositions;
+	std::vector<int> boxPositions;
 
 	while (window.isOpen())
 	{
@@ -142,16 +144,27 @@ int main()
 					placingPlayer = false;
 				}
 				if(event.key.code == sf::Keyboard::Return) {
-					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), 5, 1);
 					//find the best possible path
+					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), 5, 1);
+					/*
+					//identify holes
+					for(int i = 0; i < path.size(); i + 2) {
+						if(test.getTileValue(path[i], path[i+1])) {
+							holePositions.push_back(path[i]);
+							holePositions.push_back(path[i+1]);
+						}
+					}
+					//identify boxes
+					boxPositions = test.boxPositions();
+					//path = test.findpath(boxPositions[0], boxPositions[1], holePositions[0], holePositions[1]);
 					std::cout << "PATH" << std::endl;
 					for(int i = 0; i < path.size(); i++) {
 						std::cout << path[i] << std::endl;
 					}
 					std::cout << "END OF PATH" << std::endl;
-					//identify holes
+
 					//assign boxes to holes
-					//move bozes to each hole
+					*/
 					playerReady = true;
 				}
 				break;
