@@ -2,7 +2,7 @@
 #include <iostream>
 
 map::map(int width, int height) :
-	player()
+	player(1, 1)
 {
 	this->width = width;
 	this->height = height;
@@ -10,7 +10,7 @@ map::map(int width, int height) :
 }
 
 map::map(int width, int height, int pos_x, int pos_y) :
-	player()
+	player(1, 1)
 {
 	this->width = width;
 	this->height = height;
@@ -98,7 +98,12 @@ int map::heuristic(Node n, int destX, int destY) {
 	return std::abs(destX - n.getX()) + std::abs(destY - n.getY());
 }
 
-std::vector<int[2]> map::findpath(int originX, int originY, int destinationX, int destinationY) {
+std::vector<int> map::reconstructPath(Node n) {
+	std::vector<int> result;
+	return result;
+}
+
+std::vector<int> map::findpath(int originX, int originY, int destinationX, int destinationY) {
 	struct compareNodes {
 		bool operator() (Node const &n1, Node const &n2) {
 			return n1.getfx() > n2.getfx();
@@ -118,6 +123,10 @@ std::vector<int[2]> map::findpath(int originX, int originY, int destinationX, in
 		if(current.getX() == destinationX && current.getY() == destinationY)
 			return reconstructPath(current);//TODO: end here and return path
 
+		for(int i = 0; i < assist.size(); i++) {
+			if(assist[i].getX() == current.getX() && assist[i].getY() == current.getY())
+				assist.erase(assist.begin() + i);
+		}
 		unprocessed.pop();
 		processed.push_back(current);
 
@@ -164,6 +173,4 @@ std::vector<int[2]> map::findpath(int originX, int originY, int destinationX, in
 			}
 		}
 	}
-
-	return std::vector<int[2]>();
 }
