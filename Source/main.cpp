@@ -31,8 +31,10 @@ int main()
 	tileGUI.setTexture(tile::tileset);
 	tileGUI.setPosition(1, 1);
 
-	bool placingPlayer = false;
-
+	bool placingPlayer = false; //checks whether user is currently placing player
+	bool playerReady = false; //true when AI is ready to traverse the map
+	sf::Time playerTime;
+	sf::Clock playerClock;
 
 	sf::Text widthSpinnerT;
 	sf::Text widthLabel;
@@ -68,7 +70,7 @@ int main()
 		widthSpinnerT.setString(intToString(test.getWidth()));
 		heightSpinnerT.setString(intToString(test.getHeight()));
 
-		//INPUT
+		// INPUT
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -141,15 +143,33 @@ int main()
 				}
 				if(event.key.code == sf::Keyboard::Return) {
 					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), 5, 1);
+					//find the best possible path
 					std::cout << "PATH" << std::endl;
 					for(int i = 0; i < path.size(); i++) {
 						std::cout << path[i] << std::endl;
 					}
 					std::cout << "END OF PATH" << std::endl;
+					//identify holes
+					//assign boxes to holes
+					//move bozes to each hole
+					playerReady = true;
 				}
 				break;
 			default:
 				break;
+			}
+		}
+
+		// UPDATES
+		if(playerReady) {
+			playerTime  = playerClock.getElapsedTime();
+			if(playerTime.asMilliseconds() > 500) {
+				playerClock.restart();
+				test.setPlayerPosition(path[0], path[1]);
+				path.erase(path.begin());
+				path.erase(path.begin());
+				if(path.empty())
+					playerReady = false;
 			}
 		}
 

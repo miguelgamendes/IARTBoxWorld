@@ -23,10 +23,7 @@ class map
 			return n1.getfx() > n2.getfx();
 		}
 	};
-	std::vector<Node> processed;
-	//std::priority_queue<Node, std::vector<Node>, compareNodes> unprocessed;
-	std::vector<Node> unprocessed;
-	std::vector<Node> assist;
+	
 	int cameFrom[30][30][2];
 
 public:
@@ -42,7 +39,7 @@ public:
 	void setPlayerPosition(int x, int y);
 
 	//Getters
-	tile getTileValue(int x, int y);
+	int getTileValue(int x, int y);
 	int& getWidth() {return this->width; }
 	int& getHeight() {return this->height; }
 	std::vector<std::vector<tile>>& getTiles() {return this->tiles; }

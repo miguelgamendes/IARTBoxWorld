@@ -4,11 +4,12 @@
 
 class Player {
 private:
-	sf::Sprite sprite;
+	
 	sf::Texture texture;
 	int pos_x;
 	int pos_y;
 public:
+	sf::Sprite sprite;
 	Player();
 	Player(int pos_x, int pos_y);
 
@@ -23,5 +24,5 @@ public:
 	void setMapPosY(int y);
 
 	//functions
-	void render(sf::RenderWindow * target);
+	void render(sf::RenderWindow& target);
 };

@@ -38,6 +38,6 @@ void Player::setMapPosY(int y) {
 	pos_y = y;
 }
 
-void Player::render(sf::RenderWindow * target) {
-	target->draw(sprite);
+void Player::render(sf::RenderWindow& target) {
+	target.draw(sprite);
 }

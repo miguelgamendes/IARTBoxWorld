@@ -35,8 +35,8 @@ void map::setPlayerPosition(int x, int y) {
 	player.setMapPosY(y);
 }
 
-tile map::getTileValue(int x, int y) {
-	return tiles[x][y].getSelector();
+int map::getTileValue(int x, int y) {
+	return tiles[y][x].getSelector();
 }
 
 sf::FloatRect map::getMapBounds() {
@@ -93,7 +93,7 @@ void map::drawMap(sf::RenderWindow& window) {
 			//for drawing the player
 			if(i == player.getMapPosY() && j == player.getMapPosX()) {
 				player.setPosition(sf::Vector2f(pos_x + player.getMapPosX() * 16, pos_y + player.getMapPosY() * 16));
-				player.render(&window);
+				window.draw(player.sprite);
 			}
 		}
 	}
@@ -102,7 +102,7 @@ void map::drawMap(sf::RenderWindow& window) {
 int map::distance(Node n1, Node n2) {
 	if(tiles[n2.getX()][n2.getY()].getSelector() >= 9 &&
 		tiles[n2.getX()][n2.getY()].getSelector() <= 11)
-		return 1;
+		return 1000;
 	else
 		return 1;
 }
@@ -147,6 +147,11 @@ std::vector<int> map::reconstructPath(Node n) {
 }
 
 std::vector<int> map::findpath(int originX, int originY, int destinationX, int destinationY) {
+	std::vector<Node> processed;
+	//std::priority_queue<Node, std::vector<Node>, compareNodes> unprocessed;
+	std::vector<Node> unprocessed;
+	std::vector<Node> assist;
+	
 	cameFrom[originX][originY][0] = 0;
 	cameFrom[originX][originY][1] = 0;
 	Node current(0, 0); //the current node to analyze
@@ -176,17 +181,17 @@ std::vector<int> map::findpath(int originX, int originY, int destinationX, int d
 
 		//get neighbours of current Node
 		std::vector<Node> neighbours;
-		if(tiles[current.getX()+1][current.getY()].getSelector() >= 6 &&
-			tiles[current.getX()+1][current.getY()].getSelector() <= 11) //here we evaluate passable tiles manually, according to the established tileset
+		if(getTileValue(current.getX()+1, current.getY()) >= 6 &&
+			getTileValue(current.getX()+1, current.getY()) <= 11) //here we evaluate passable tiles manually, according to the established tileset
 			neighbours.push_back(Node(current.getX()+1, current.getY()));
-		if(tiles[current.getX()][current.getY()+1].getSelector() >= 6 &&
-			tiles[current.getX()][current.getY()+1].getSelector() <= 11)
+		if(getTileValue(current.getX(), current.getY()+1) >= 6 &&
+			getTileValue(current.getX()+1, current.getY()+1) <= 11)
 			neighbours.push_back(Node(current.getX(), current.getY()+1));
-		if(tiles[current.getX()-1][current.getY()].getSelector() >= 6 &&
-			tiles[current.getX()-1][current.getY()].getSelector() <= 11)
+		if(getTileValue(current.getX()-1, current.getY()) >= 6 &&
+			getTileValue(current.getX()-1, current.getY()) <= 11)
 			neighbours.push_back(Node(current.getX()-1, current.getY()));
-		if(tiles[current.getX()][current.getY()-1].getSelector() >= 6 &&
-			tiles[current.getX()][current.getY()-1].getSelector() <= 11)
+		if(getTileValue(current.getX(), current.getY()-1) >= 6 &&
+			getTileValue(current.getX(), current.getY()-1) <= 11)
 			neighbours.push_back(Node(current.getX(), current.getY()-1));
 
 		//process neighbours
