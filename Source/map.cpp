@@ -86,6 +86,18 @@ void map::drawMap(sf::RenderWindow& window) {
 	}
 }
 
+int map::distance(Node n1, Node n2) {
+	if(tiles[n2.getX()][n2.getY()].getSelector() >= 9 &&
+		tiles[n2.getX()][n2.getY()].getSelector() <= 11)
+		return 1000;
+	else
+		return 1;
+}
+
+int map::heuristic(Node n, int destX, int destY) {
+	return std::abs(destX - n.getX()) + std::abs(destY - n.getY());
+}
+
 std::vector<int[2]> map::findpath(int originX, int originY, int destinationX, int destinationY) {
 	struct compareNodes {
 		bool operator() (Node const &n1, Node const &n2) {
@@ -96,19 +108,61 @@ std::vector<int[2]> map::findpath(int originX, int originY, int destinationX, in
 	Node current(0, 0); //the current node to analyze
 	std::vector<Node> processed;
 	std::priority_queue<Node, std::vector<Node>, compareNodes> unprocessed;
+	std::vector<Node> assist;
+	//every operation to the priority queue must be accompanied by operations to the assisting vector
 	unprocessed.push(Node(originX, originY, 0, (std::abs(destinationX - originX) + std::abs(destinationY - originY)))); //put first node in unprocessed nodes
+	assist.push_back(unprocessed.top());
 
 	while(!unprocessed.empty()) {
 		current = unprocessed.top();
 		if(current.getX() == destinationX && current.getY() == destinationY)
-			;//TODO: end here and return path
+			return reconstructPath(current);//TODO: end here and return path
 
 		unprocessed.pop();
 		processed.push_back(current);
 
 		//get neighbours of current Node
 		std::vector<Node> neighbours;
+		if(tiles[current.getX()+1][current.getY()].getSelector() >= 6 &&
+			tiles[current.getX()+1][current.getY()].getSelector() <= 11) //here we evaluate passable tiles manually, according to the established tileset
+			neighbours.push_back(Node(current.getX()+1, current.getY()));
+		if(tiles[current.getX()][current.getY()+1].getSelector() >= 6 &&
+			tiles[current.getX()][current.getY()+1].getSelector() <= 11)
+			neighbours.push_back(Node(current.getX(), current.getY()+1));
+		if(tiles[current.getX()-1][current.getY()].getSelector() >= 6 &&
+			tiles[current.getX()-1][current.getY()].getSelector() <= 11)
+			neighbours.push_back(Node(current.getX()-1, current.getY()));
+		if(tiles[current.getX()][current.getY()-1].getSelector() >= 6 &&
+			tiles[current.getX()][current.getY()-1].getSelector() <= 11)
+			neighbours.push_back(Node(current.getX(), current.getY()-1));
+
 		//process neighbours
+		for(int i = 0; i < neighbours.size(); i++) {
+			//check if neighbour has been processed
+			bool processedCheck = false;
+			for(int j = 0; j < processed.size(); j++) {
+				if(neighbours[i].getX() == processed[j].getX() &&
+					neighbours[i].getY() == processed[j].getY())
+					processedCheck = true;
+			}
+			if(processedCheck)
+				continue;
+			int possibleGX = current.getgx() + distance(current, neighbours[i]);
+
+			bool unprocessedCheck = false;
+			for (int j = 0; j < assist.size(); j++) {
+				if(neighbours[i].getX() == assist[j].getX() &&
+					neighbours[i].getY() == assist[j].getY())
+					unprocessedCheck = true;
+			}
+			if(!unprocessedCheck && possibleGX < current.getgx()) {
+				neighbours[i].cameFrom(&current);
+				neighbours[i].setgx(possibleGX);
+				neighbours[i].sethx(heuristic(neighbours[i], destinationX, destinationY));
+				if(!unprocessedCheck)
+					unprocessed.push(neighbours[i]);
+			}
+		}
 	}
 
 	return std::vector<int[2]>();

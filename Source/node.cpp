@@ -20,6 +20,14 @@ int Node::getY() {
 	return posY;
 }
 
+int Node::getgx() const {
+	return gx;
+}
+
+int Node::gethx() const {
+	return hx;
+}
+
 int Node::getfx() const {
 	return gx + hx;
 }
@@ -34,4 +42,8 @@ void Node::setgx(int g) {
 
 void Node::sethx(int h) {
 	hx = h;
+}
+
+void Node::cameFrom(Node * n) {
+	origin = n;
 }

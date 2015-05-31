@@ -18,10 +18,13 @@ public:
 	//getters
 	int getX();
 	int getY();
+	int getgx() const;
+	int gethx() const;
 	int getfx() const;
 	Node * getOrigin();
 
 	//setters
 	void setgx(int g);
 	void sethx(int h);
+	void cameFrom(Node * n);
 };

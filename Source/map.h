@@ -38,5 +38,8 @@ public:
 	void modifyWidth(int rate);
 	void modifyHeight(int rate);
 	void drawMap(sf::RenderWindow& window);
+	int distance(Node n1, Node n2);
+	int heuristic(Node n, int destX, int destY);
+	std::vector<int[2]> reconstructPath(Node n);
 	std::vector<int[2]> findpath(int originX, int originY, int destinationX, int destinationY);
 };
