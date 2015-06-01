@@ -112,8 +112,9 @@ int main()
 						std::cout << (int)((event.mouseButton.x - test.getMapBounds().left) / 16) << " | " << (int)((event.mouseButton.y - test.getMapBounds().top) / 16) << std::endl;
 						if(placingPlayer) {
 							test.setPlayerPosition(i, j);
-						} else
+						} else {
 							test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
+						}
 						std::cout << selectedTile.x + selectedTile.y * 3 << std::endl;
 					}
 					else if (widthSpinner.getSprite().getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
