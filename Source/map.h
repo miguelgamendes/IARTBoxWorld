@@ -4,6 +4,8 @@
 #include <map>
 #include <queue>
 #include <vector>
+
+#include "box.h"
 #include "node.h"
 #include "player.h"
 #include "tile.h"
@@ -11,6 +13,7 @@
 class map
 {
 	Player player;
+	std::vector<Box> boxes;
 	std::vector<std::vector<tile>> tiles;
 	int width;
 	int height;
@@ -49,8 +52,11 @@ public:
 	sf::Vector2i getGoal();
 
 	//Functions
+	void preparePlayer();
 	void modifyWidth(int rate);
 	void modifyHeight(int rate);
+	void addBox(int x, int y, int selector);
+	void removeBox(int x, int y);
 	void drawMap(sf::RenderWindow& window);
 	std::vector<int> boxPositions();
 	int distance(Node n1, Node n2);

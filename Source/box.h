@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 
 class Box {
-	sf::Vector2f position;
 	sf::Vector2i mapPosition;
+	int selector;
 	sf::Vector2i targetHole;
 	sf::Sprite sprite;
 	sf::Texture texture;
@@ -22,4 +22,8 @@ public:
 	void setPosition(int x, int y);
 	void setMapPosition(int x, int y);
 	void setTarget(int x, int y);
+
+	//functions
+	void initialize(int x, int y, int selector);
+	void render(sf::RenderWindow& target);
 };

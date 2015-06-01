@@ -57,18 +57,22 @@ int map::getPlayerPosY() {
 sf::Vector2i map::getGoal() {
 	for(int i = 0; i < tiles.size(); i++) {
 		for(int j = 0; j < tiles[i].size(); j++) {
-			if(getTileValue(i, j) == 4) {
-				if(i == 0)
-					return sf::Vector2i(i, j+1);
+			if(getTileValue(j, i) == 4) {
 				if(j == 0)
-					return sf::Vector2i(i+1, j);
+					return sf::Vector2i(j+1, i);
+				if(i == 0)
+					return sf::Vector2i(j, i+1);
+				if(j > i)
+					return sf::Vector2i(j-1, i);
 				if(i > j)
-					return sf::Vector2i(i-1, j);
-				if(j < i)
-					return sf::Vector2i(i, j-1);
+					return sf::Vector2i(j, i-1);
 			}
 		}
 	}
+}
+
+void map::preparePlayer() {
+	player = Player();
 }
 
 void map::modifyWidth(int rate) {
@@ -101,6 +105,18 @@ void map::modifyHeight(int rate) {
 	else this->height = 1;
 }
 
+void map::addBox(int x, int y, int selector) {
+	boxes.push_back(Box());
+	boxes.back().initialize(x, y, selector);
+}
+
+void map::removeBox(int x, int y) {
+	for(int i = 0; i < boxes.size(); i++) {
+		if(boxes[i].getMapPosition() == sf::Vector2i(x, y))
+			boxes.erase(boxes.begin() + i);
+	}
+}
+
 void map::drawMap(sf::RenderWindow& window) {
 	for (int i = 0; i < this->tiles.size(); ++i) {
 		for (int j = 0; j < this->tiles[i].size(); ++j) {
@@ -111,6 +127,14 @@ void map::drawMap(sf::RenderWindow& window) {
 			if(i == player.getMapPosY() && j == player.getMapPosX()) {
 				player.setPosition(sf::Vector2f(pos_x + player.getMapPosX() * 16, pos_y + player.getMapPosY() * 16));
 				window.draw(player.sprite);
+			}
+
+			//for drawing boxes
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(j, i)) {
+					boxes[i].setPosition(pos_x + boxes[i].getMapPosition().x * 16, pos_y + boxes[i].getMapPosition().y * 16);
+					boxes[i].render(window);
+				}
 			}
 		}
 	}

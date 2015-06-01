@@ -22,6 +22,7 @@ int main()
 	Spinner::texture.loadFromFile("spinner.png");
 	font.loadFromFile("arial.ttf");
 	map test = loadMap("test");
+	test.preparePlayer();
 	test.setPos_x(300);
 	test.setPos_y(200);
 	//map test(5, 5, 300, 200);
@@ -113,7 +114,10 @@ int main()
 						if(placingPlayer) {
 							test.setPlayerPosition(i, j);
 						} else {
-							test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
+							if((selectedTile.x + selectedTile.y * 3) > 2)
+								test.getTiles()[j][i].setSelector(selectedTile.x + selectedTile.y * 3);
+							else
+								test.addBox(i, j, (selectedTile.x + selectedTile.y * 3));
 						}
 						std::cout << selectedTile.x + selectedTile.y * 3 << std::endl;
 					}
