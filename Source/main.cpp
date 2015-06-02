@@ -184,18 +184,11 @@ int main()
 					
 					//set player upon his first god damn quest
 
-					//
-					boxPath = test.findboxpath(test.boxes[boxIndex].getMapPosition().x, test.boxes[boxIndex].getMapPosition().y, test.boxes[boxIndex].getTarget().x, test.boxes[boxIndex].getTarget().y);
+					if(!holePositions.empty()) {
+						boxPath = test.findboxpath(test.boxes[boxIndex].getMapPosition().x, test.boxes[boxIndex].getMapPosition().y, test.boxes[boxIndex].getTarget().x, test.boxes[boxIndex].getTarget().y);
 
-					for(int i = 0; i < boxPath.size(); i = i + 2) {
-						std::cout << boxPath[i] << " " << boxPath[i+1] << std::endl;
-					}
-
-					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), boxPath[0] + (boxPath[0] - boxPath[2]), boxPath[1] + (boxPath[1] - boxPath[3]));
-					path.insert(path.end(), boxPath.begin(), boxPath.end());
-
-					for(int i = 0; i < path.size(); i = i + 2) {
-						std::cout << path[i] << " " << path[i+1] << std::endl;
+						path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), boxPath[0] + (boxPath[0] - boxPath[2]), boxPath[1] + (boxPath[1] - boxPath[3]));
+						path.insert(path.end(), boxPath.begin(), boxPath.end());
 					}
 
 					playerReady = true;

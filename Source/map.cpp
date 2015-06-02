@@ -237,17 +237,45 @@ std::vector<int> map::findpath(int originX, int originY, int destinationX, int d
 		//get neighbours of current Node
 		std::vector<Node> neighbours;
 		if(getTileValue(current.getX()+1, current.getY()) >= 6 &&
-			getTileValue(current.getX()+1, current.getY()) <= 11) //here we evaluate passable tiles manually, according to the established tileset
-			neighbours.push_back(Node(current.getX()+1, current.getY()));
+			getTileValue(current.getX()+1, current.getY()) <= 11) { //here we evaluate passable tiles manually, according to the established tileset
+			bool blocked = false;
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX()+1, current.getY()))
+					blocked = true;
+			}
+			if(!blocked)
+				neighbours.push_back(Node(current.getX()+1, current.getY()));
+		}
 		if(getTileValue(current.getX(), current.getY()+1) >= 6 &&
-			getTileValue(current.getX(), current.getY()+1) <= 11)
-			neighbours.push_back(Node(current.getX(), current.getY()+1));
+			getTileValue(current.getX(), current.getY()+1) <= 11){
+			bool blocked = false;
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX(), current.getY()+1))
+					blocked = true;
+			}
+			if(!blocked)
+				neighbours.push_back(Node(current.getX(), current.getY()+1));
+		}
 		if(getTileValue(current.getX()-1, current.getY()) >= 6 &&
-			getTileValue(current.getX()-1, current.getY()) <= 11)
-			neighbours.push_back(Node(current.getX()-1, current.getY()));
+			getTileValue(current.getX()-1, current.getY()) <= 11) {
+			bool blocked = false;
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX()-1, current.getY()))
+					blocked = true;;
+			}
+			if(!blocked)
+				neighbours.push_back(Node(current.getX()-1, current.getY()));
+		}
 		if(getTileValue(current.getX(), current.getY()-1) >= 6 &&
-			getTileValue(current.getX(), current.getY()-1) <= 11)
-			neighbours.push_back(Node(current.getX(), current.getY()-1));
+			getTileValue(current.getX(), current.getY()-1) <= 11) {
+			bool blocked = false;
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX(), current.getY()-1))
+					blocked = true;
+			}
+			if(!blocked)
+				neighbours.push_back(Node(current.getX(), current.getY()-1));
+		}
 
 		//process neighbours
 		for(int i = 0; i < neighbours.size(); i++) {
