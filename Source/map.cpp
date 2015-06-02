@@ -142,13 +142,9 @@ void map::drawMap(sf::RenderWindow& window) {
 
 std::vector<int> map::boxPositions() {
 	std::vector<int> final;
-	for(int i = 0; i < tiles.size(); i++) {
-		for(int j = 0; j < tiles[i].size(); j++) {
-			if(getTileValue(i, j) <= 2) {
-				final.push_back(i);
-				final.push_back(j);
-			}
-		}
+	for(int i = 0; i < boxes.size(); i++) {
+		final.push_back(boxes[i].getMapPosition().x);
+		final.push_back(boxes[i].getMapPosition().y);
 	}
 
 	return final;
@@ -319,23 +315,43 @@ std::vector<int> map::findboxpath(int originX, int originY, int destinationX, in
 		if(getTileValue(current.getX()+1, current.getY()) >= 6 &&
 			getTileValue(current.getX()+1, current.getY()) <= 11 &&
 			getTileValue(current.getX()-1, current.getY()) >= 6 &&
-			getTileValue(current.getX()-1, current.getY()) <= 11) //here we evaluate passable tiles manually, according to the established tileset
+			getTileValue(current.getX()-1, current.getY()) <= 11) { //here we evaluate passable tiles manually, according to the established tileset
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX()+1, current.getY()))
+					break;
+			}
 			neighbours.push_back(Node(current.getX()+1, current.getY()));
+		}
 		if(getTileValue(current.getX(), current.getY()+1) >= 6 &&
 			getTileValue(current.getX(), current.getY()+1) <= 11 &&
 			getTileValue(current.getX(), current.getY()-1) >= 6 &&
-			getTileValue(current.getX(), current.getY()-1) <= 11)
+			getTileValue(current.getX(), current.getY()-1) <= 11) {
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX(), current.getY()+1))
+					break;
+			}
 			neighbours.push_back(Node(current.getX(), current.getY()+1));
+		}
 		if(getTileValue(current.getX()-1, current.getY()) >= 6 &&
 			getTileValue(current.getX()-1, current.getY()) <= 11 &&
 			getTileValue(current.getX()+1, current.getY()) >= 6 &&
-			getTileValue(current.getX()+1, current.getY()) <= 11)
+			getTileValue(current.getX()+1, current.getY()) <= 11) {
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX()-1, current.getY()))
+					break;
+			}
 			neighbours.push_back(Node(current.getX()-1, current.getY()));
+		}
 		if(getTileValue(current.getX(), current.getY()-1) >= 6 &&
 			getTileValue(current.getX(), current.getY()-1) <= 11 &&
 			getTileValue(current.getX(), current.getY()+1) >= 6 &&
-			getTileValue(current.getX(), current.getY()+1) <= 11)
+			getTileValue(current.getX(), current.getY()+1) <= 11) {
+			for(int i = 0; i < boxes.size(); i++) {
+				if(boxes[i].getMapPosition() == sf::Vector2i(current.getX(), current.getY()-1))
+					break;
+			}
 			neighbours.push_back(Node(current.getX(), current.getY()-1));
+		}
 
 		//process neighbours
 		for(int i = 0; i < neighbours.size(); i++) {

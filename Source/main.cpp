@@ -155,7 +155,7 @@ int main()
 					sf::Vector2i exit = test.getGoal();
 					//find the best possible path
 					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), exit.x, exit.y);
-					/*
+					
 					//identify holes
 					for(int i = 0; i < path.size(); i + 2) {
 						if(test.getTileValue(path[i], path[i+1])) {
@@ -163,6 +163,12 @@ int main()
 							holePositions.push_back(path[i+1]);
 						}
 					}
+
+					for(int i = 0; i < path.size(); i++) {
+						std::cout << path[i] << std::endl;
+					}
+
+					/*
 					//identify boxes
 					boxPositions = test.boxPositions();
 					//path = test.findpath(boxPositions[0], boxPositions[1], holePositions[0], holePositions[1]);
@@ -174,7 +180,7 @@ int main()
 
 					//assign boxes to holes
 					*/
-					playerReady = true;
+					//playerReady = true;
 				}
 				break;
 			default:
