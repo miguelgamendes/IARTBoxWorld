@@ -39,6 +39,7 @@ public:
 
 	//Setters
 	void setTile(tile tile, int x, int y);
+	void setTileValue(int x, int y, int selector);
 	void setPos_x(int pos_x) {this->pos_x = pos_x; }
 	void setPos_y(int pos_y) {this->pos_y = pos_y; }
 	void setPlayerPosition(int x, int y);

@@ -205,10 +205,25 @@ int main()
 			if(playerTime.asMilliseconds() > 500) {
 				playerClock.restart();
 				test.setPlayerPosition(path[0], path[1]);
+
+				//check if player is pushing boxes
 				for(int i = 0; i < test.boxes.size(); i++) {
 					if(test.boxes[i].getMapPosition() == sf::Vector2i(test.getPlayerPosX(), test.getPlayerPosY()))
 						test.boxes[i].setMapPosition(path[2], path[3]);
 				}
+
+				//resolve if box covers hole
+				for(int i = 0; i < test.boxes.size(); i++) {
+					for(int j = 0; j < holePositions.size(); j = j + 2) {
+						if(test.boxes[i].getMapPosition() == sf::Vector2i(holePositions[j], holePositions[j+1])) {
+							test.removeBox(holePositions[j], holePositions[j+1]);
+							test.setTileValue(holePositions[j+1], holePositions[j], 7);
+							holePositions.erase(holePositions.begin());
+							holePositions.erase(holePositions.begin());
+						}
+					}
+				}
+
 				path.erase(path.begin());
 				path.erase(path.begin());
 				if(path.empty()){
@@ -232,6 +247,9 @@ int main()
 
 							path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), boxPath[0] + (boxPath[0] - boxPath[2]), boxPath[1] + (boxPath[1] - boxPath[3]));
 							path.insert(path.end(), boxPath.begin(), boxPath.end());
+						} else {
+							sf::Vector2i exit = test.getGoal();
+							path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), exit.x, exit.y);
 						}
 					}
 				}

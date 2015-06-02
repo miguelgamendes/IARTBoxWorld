@@ -33,6 +33,10 @@ void map::setTile(tile tile, int x, int y)
 	this->tiles[x][y] = tile;
 }
 
+void map::setTileValue(int x, int y, int selector) {
+	tiles[x][y].setSelector(selector);
+}
+
 void map::setPlayerPosition(int x, int y) {
 	player.setMapPosX(x);
 	player.setMapPosY(y);
