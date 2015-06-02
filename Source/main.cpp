@@ -205,13 +205,35 @@ int main()
 			if(playerTime.asMilliseconds() > 500) {
 				playerClock.restart();
 				test.setPlayerPosition(path[0], path[1]);
+				for(int i = 0; i < test.boxes.size(); i++) {
+					if(test.boxes[i].getMapPosition() == sf::Vector2i(test.getPlayerPosX(), test.getPlayerPosY()))
+						test.boxes[i].setMapPosition(path[2], path[3]);
+				}
 				path.erase(path.begin());
 				path.erase(path.begin());
 				if(path.empty()){
 					if(test.getPlayerPosX() == test.getGoal().x && test.getPlayerPosY() == test.getGoal().y)
 						playerReady = false;
-					else
-						; //figure our next move
+					else {
+						int boxIndex = 0;
+						int dist = 1000;
+						for(int i = 0; i < test.boxes.size(); i++) {
+							int newDist = test.distance(Node(test.boxes[i].getMapPosition().x, test.boxes[i].getMapPosition().y), Node(holePositions[0], holePositions[1]));
+							if(newDist < dist) {
+								dist = newDist;
+								boxIndex = i;
+							}
+						}
+						if(dist < 1000)
+							test.boxes[boxIndex].setTarget(holePositions[0], holePositions[1]);
+
+						if(!holePositions.empty()) {
+							boxPath = test.findboxpath(test.boxes[boxIndex].getMapPosition().x, test.boxes[boxIndex].getMapPosition().y, test.boxes[boxIndex].getTarget().x, test.boxes[boxIndex].getTarget().y);
+
+							path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), boxPath[0] + (boxPath[0] - boxPath[2]), boxPath[1] + (boxPath[1] - boxPath[3]));
+							path.insert(path.end(), boxPath.begin(), boxPath.end());
+						}
+					}
 				}
 			}
 		}
