@@ -132,7 +132,7 @@ void map::drawMap(sf::RenderWindow& window) {
 			//for drawing boxes
 			for(int k = 0; k < boxes.size(); k++) {
 				if(boxes[k].getMapPosition() == sf::Vector2i(j, i)) {
-					boxes[k].setPosition(pos_x + boxes[i].getMapPosition().x * 16, pos_y + boxes[i].getMapPosition().y * 16);
+					boxes[k].setPosition(pos_x + boxes[k].getMapPosition().x * 16, pos_y + boxes[k].getMapPosition().y * 16);
 					boxes[k].render(window);
 				}
 			}
