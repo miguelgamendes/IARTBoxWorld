@@ -164,9 +164,15 @@ int main()
 						}
 					}
 
-					/*
+					
 					//identify boxes
 					boxPositions = test.boxPositions();
+
+					for(int i = 0; i < boxPositions.size(); i++) {
+						std::cout << boxPositions[i] << std::endl;
+					}
+
+					/*
 					//path = test.findpath(boxPositions[0], boxPositions[1], holePositions[0], holePositions[1]);
 					std::cout << "PATH" << std::endl;
 					for(int i = 0; i < path.size(); i++) {
