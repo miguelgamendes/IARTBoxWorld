@@ -157,15 +157,11 @@ int main()
 					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), exit.x, exit.y);
 					
 					//identify holes
-					for(int i = 0; i < path.size(); i + 2) {
-						if(test.getTileValue(path[i], path[i+1])) {
+					for(int i = 0; i < path.size(); i = i + 2) {
+						if(test.getTileValue(path[i], path[i+1]) >= 9) {
 							holePositions.push_back(path[i]);
 							holePositions.push_back(path[i+1]);
 						}
-					}
-
-					for(int i = 0; i < path.size(); i++) {
-						std::cout << path[i] << std::endl;
 					}
 
 					/*
@@ -180,7 +176,7 @@ int main()
 
 					//assign boxes to holes
 					*/
-					//playerReady = true;
+					playerReady = true;
 				}
 				break;
 			default:
