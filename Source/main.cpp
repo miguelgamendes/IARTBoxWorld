@@ -69,6 +69,7 @@ int main()
 	std::vector<int> path;
 	std::vector<int> holePositions;
 	std::vector<int> boxPositions;
+	std::vector<int> boxPath;
 
 	while (window.isOpen())
 	{
@@ -164,24 +165,39 @@ int main()
 						}
 					}
 
-					
 					//identify boxes
 					boxPositions = test.boxPositions();
 
-					for(int i = 0; i < boxPositions.size(); i++) {
-						std::cout << boxPositions[i] << std::endl;
+					//assign box to first hole
+					
+					int boxIndex = 0;
+					int dist = 1000;
+					for(int i = 0; i < test.boxes.size(); i++) {
+						int newDist = test.distance(Node(test.boxes[i].getMapPosition().x, test.boxes[i].getMapPosition().y), Node(holePositions[0], holePositions[1]));
+						if(newDist < dist) {
+							dist = newDist;
+							boxIndex = i;
+						}
+					}
+					if(dist < 1000)
+						test.boxes[boxIndex].setTarget(holePositions[0], holePositions[1]);
+					
+					//set player upon his first god damn quest
+
+					//
+					boxPath = test.findboxpath(test.boxes[boxIndex].getMapPosition().x, test.boxes[boxIndex].getMapPosition().y, test.boxes[boxIndex].getTarget().x, test.boxes[boxIndex].getTarget().y);
+
+					for(int i = 0; i < boxPath.size(); i = i + 2) {
+						std::cout << boxPath[i] << " " << boxPath[i+1] << std::endl;
 					}
 
-					/*
-					//path = test.findpath(boxPositions[0], boxPositions[1], holePositions[0], holePositions[1]);
-					std::cout << "PATH" << std::endl;
-					for(int i = 0; i < path.size(); i++) {
-						std::cout << path[i] << std::endl;
-					}
-					std::cout << "END OF PATH" << std::endl;
+					path = test.findpath(test.getPlayerPosX(), test.getPlayerPosY(), boxPath[0] + (boxPath[0] - boxPath[2]), boxPath[1] + (boxPath[1] - boxPath[3]));
+					path.insert(path.end(), boxPath.begin(), boxPath.end());
 
-					//assign boxes to holes
-					*/
+					for(int i = 0; i < path.size(); i = i + 2) {
+						std::cout << path[i] << " " << path[i+1] << std::endl;
+					}
+
 					playerReady = true;
 				}
 				break;
@@ -198,8 +214,12 @@ int main()
 				test.setPlayerPosition(path[0], path[1]);
 				path.erase(path.begin());
 				path.erase(path.begin());
-				if(path.empty())
-					playerReady = false;
+				if(path.empty()){
+					if(test.getPlayerPosX() == test.getGoal().x && test.getPlayerPosY() == test.getGoal().y)
+						playerReady = false;
+					else
+						; //figure our next move
+				}
 			}
 		}
 

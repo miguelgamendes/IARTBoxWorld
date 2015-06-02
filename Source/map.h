@@ -13,7 +13,7 @@
 class map
 {
 	Player player;
-	std::vector<Box> boxes;
+	
 	std::vector<std::vector<tile>> tiles;
 	int width;
 	int height;
@@ -30,6 +30,8 @@ class map
 	int cameFrom[30][30][2];
 
 public:
+	std::vector<Box> boxes;
+
 	//Constructor/Destructor
 	map(int width, int height);
 	map(int width, int height, int pos_x, int pos_y);
