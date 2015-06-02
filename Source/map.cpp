@@ -72,7 +72,7 @@ sf::Vector2i map::getGoal() {
 }
 
 void map::preparePlayer() {
-	player = Player();
+	player.prepare();
 }
 
 void map::modifyWidth(int rate) {
@@ -106,7 +106,7 @@ void map::modifyHeight(int rate) {
 }
 
 void map::addBox(int x, int y, int selector) {
-	boxes.push_back(Box());
+	boxes.push_back(Box(x, y, selector));
 	boxes.back().initialize(x, y, selector);
 }
 
@@ -126,14 +126,14 @@ void map::drawMap(sf::RenderWindow& window) {
 			//for drawing the player
 			if(i == player.getMapPosY() && j == player.getMapPosX()) {
 				player.setPosition(sf::Vector2f(pos_x + player.getMapPosX() * 16, pos_y + player.getMapPosY() * 16));
-				window.draw(player.sprite);
+				player.render(window);
 			}
 
 			//for drawing boxes
-			for(int i = 0; i < boxes.size(); i++) {
-				if(boxes[i].getMapPosition() == sf::Vector2i(j, i)) {
-					boxes[i].setPosition(pos_x + boxes[i].getMapPosition().x * 16, pos_y + boxes[i].getMapPosition().y * 16);
-					boxes[i].render(window);
+			for(int k = 0; k < boxes.size(); k++) {
+				if(boxes[k].getMapPosition() == sf::Vector2i(j, i)) {
+					boxes[k].setPosition(pos_x + boxes[i].getMapPosition().x * 16, pos_y + boxes[i].getMapPosition().y * 16);
+					boxes[k].render(window);
 				}
 			}
 		}

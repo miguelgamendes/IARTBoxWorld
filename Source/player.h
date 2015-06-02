@@ -24,5 +24,6 @@ public:
 	void setMapPosY(int y);
 
 	//functions
+	void prepare();
 	void render(sf::RenderWindow& target);
 };

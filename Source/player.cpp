@@ -38,6 +38,13 @@ void Player::setMapPosY(int y) {
 	pos_y = y;
 }
 
+void Player::prepare() {
+	texture.loadFromFile("player.png");
+	sprite.setTexture(texture);
+	pos_x = 0;
+	pos_y = 0;
+}
+
 void Player::render(sf::RenderWindow& target) {
 	target.draw(sprite);
 }

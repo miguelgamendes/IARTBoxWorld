@@ -3,7 +3,7 @@
 Box::Box() {
 	mapPosition = sf::Vector2i(0, 0);
 	this->selector = 0;
-	texture.loadFromFile("tileset.png");
+	//texture.loadFromFile("tileset.png");
 	sprite.setTexture(texture);
 	div_t divres;
 	divres = div(selector, 3);
@@ -13,7 +13,7 @@ Box::Box() {
 Box::Box(int x, int y, int selector) {
 	mapPosition = sf::Vector2i(x, y);
 	this->selector = selector;
-	texture.loadFromFile("tileset.png");
+	//texture.loadFromFile("tileset.png");
 	sprite.setTexture(texture);
 	div_t divres;
 	divres = div(selector, 3);
@@ -43,7 +43,7 @@ void Box::setTarget(int x, int y) {
 void Box::initialize(int x, int y, int selector) {
 	mapPosition = sf::Vector2i(x, y);
 	this->selector = selector;
-	texture.loadFromFile("tileset.png");
+	//texture.loadFromFile("tileset.png");
 	sprite.setTexture(texture);
 	div_t divres;
 	divres = div(selector, 3);

@@ -7,10 +7,11 @@ class Box {
 	int selector;
 	sf::Vector2i targetHole;
 	sf::Sprite sprite;
-	sf::Texture texture;
 	bool assigned;
 
 public:
+	static sf::Texture texture;
+
 	Box();
 	Box(int x, int y, int selector);
 

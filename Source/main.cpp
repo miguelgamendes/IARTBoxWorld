@@ -9,6 +9,7 @@
 
 sf::Texture tile::tileset = sf::Texture(); //needed so linker doesn't crash
 sf::Texture Spinner::texture = sf::Texture(); //needed so linker doesn't crash
+sf::Texture Box::texture = sf::Texture();
 
 std::string intToString(int &number);
 map loadMap(std::string filename);
@@ -21,6 +22,7 @@ int main()
 	tile::tileset.loadFromFile("tileset.png");
 	Spinner::texture.loadFromFile("spinner.png");
 	font.loadFromFile("arial.ttf");
+	Box::texture.loadFromFile("tileset.png");
 	map test = loadMap("test");
 	test.preparePlayer();
 	test.setPos_x(300);
